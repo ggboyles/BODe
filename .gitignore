@@ -1,0 +1,20 @@
+# Mac hidden system files
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.env/
+
+# Large model files
+*.pt
+*.onnx
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
