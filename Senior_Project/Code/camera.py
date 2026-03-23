@@ -6,7 +6,13 @@
 import cv2
 from ultralytics import YOLO
 
-# Loads YOLO model
+# we'll need these eventually, maybe more
+
+# import bosdyn.client 
+# import bosdyn.client.util
+# from bosdyn.client.image import ImageClient
+
+
 model = YOLO("yolov8n.pt")   # this is a small and fast model
 
 # Opens camera
@@ -16,7 +22,7 @@ if not camera.isOpened():
     print("Camera not found")
     exit()
 
-# Distance thresholds, can be tinkered with 
+# current distance thresholds, can be tinkered with 
 CLOSE_THRESHOLD = 120000
 FAR_THRESHOLD = 30000
 
@@ -51,6 +57,8 @@ while True:
                 area = (x2 - x1) * (y2 - y1)
 
                 # Keeps only the closest object, so BODe doesnt get confused
+                # We'll also need to implement safety features to make sure BODe 
+                # doesnt just go follow a false positive it detects
                 if area > largest_area:
                     largest_area = area
                     best_box = (x1, y1, x2, y2)
@@ -77,7 +85,7 @@ while True:
             message = "GOOD DISTANCE"
             color = (0, 255, 255) # Yellow
 
-        # Displays message
+        # Displays distance message
         cv2.putText(frame, message, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, color, 3)
 
     cv2.imshow("Tracking", frame)
@@ -85,7 +93,6 @@ while True:
     # Press Q to quit out of screen
     if cv2.waitKey(1) == ord('q'):
         break
-
 
 camera.release()
 cv2.destroyAllWindows()
@@ -102,6 +109,6 @@ cv2.destroyAllWindows()
 
 # we will want the object to be front and center most likely
 
-# if detected on the left or right back cam, then BODe needs to rotate until 
-# object is detected by front cams. This seems like it might be hard to do this smoothly
-# but not sure.
+# so, if detected on the left or right back cam, then BODe needs to rotate until 
+# object is detected by front cams. This seems like it might be difficult to do smoothly
+# but not sure. Hopefully not.
